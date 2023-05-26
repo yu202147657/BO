@@ -1,0 +1,15 @@
+artifact_uri: file:///home/jovyan/examples/examples/pytorch/MPhil_BO/mlruns/0/6f132fd8d7e446819f039c950c875d62/artifacts
+end_time: 1684890444420
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 6f132fd8d7e446819f039c950c875d62
+run_name: /home/jovyan/examples/examples/pytorch/MPhil_BO/taa/models/amazon_Bert_augment_trail1_n-aug8_seed42
+run_uuid: 6f132fd8d7e446819f039c950c875d62
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1684890433866
+status: 3
+tags: []
+user_id: jovyan

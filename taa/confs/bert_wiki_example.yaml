@@ -1,0 +1,28 @@
+model:
+  type: Bert
+dataset:
+  path: custom
+  name: wiki
+  data_dir: /home/yfn21/ondemand/data/sys/myjobs/projects/default/4/MPhil_BO/taa/Data
+  data_files: {'train': 'clean_sentences_small_wiki_train.csv', 'test': 'clean_sentences_small_wiki_test.csv'}
+  text_key: text
+abspath: /home/yfn21/ondemand/data/sys/myjobs/projects/default/4/MPhil_BO
+aug: taa
+per_device_train_batch_size: 50
+per_device_eval_batch_size: 128
+epoch: 10
+lr: 4e-5
+max_seq_length: 128
+n_aug: 8
+alpha: 0.05
+sparsity: 500
+class_imbalance: 0.75
+num_classes: 2
+method: taa
+topN: 3
+seed: 42
+trail: 1
+num_search: 1
+num_gpus: 4
+num_cpus: 40
+

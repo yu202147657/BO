@@ -1,0 +1,28 @@
+model:
+  type: Bert
+dataset:
+  path: custom
+  name: toy
+  data_dir: /home/jovyan/examples/examples/pytorch/MPhil_BO/taa/Data
+  data_files: {'train': 'custom_data_train.csv', 'test': 'custom_data_test.csv'}
+  text_key: text
+abspath: /home/jovyan/examples/examples/pytorch/MPhil_BO
+aug: imdb
+per_device_train_batch_size: 64
+per_device_eval_batch_size: 128
+epoch: 10
+lr: 4e-5
+max_seq_length: 128
+n_aug: 4
+num_op: 2
+n_aug: 8
+alpha: 0.05
+sparsity: 500
+class_imbalance: 0.75
+method: taa
+topN: 1
+seed: 59
+trail: 1
+num_search: 200
+num_gpus: 4
+num_cpus: 40

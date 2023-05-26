@@ -1,0 +1,9 @@
+SentencePiece
+transformers>=4.27.4
+nltk>=3.8.1
+hyperopt>=0.2.7
+ray>=2.3.1
+torchtext>=0.15.1
+sacremoses>=0.0.41
+nlpaug>=1.1.5
+datasets>=2.11.0

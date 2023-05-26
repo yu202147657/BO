@@ -1,0 +1,15 @@
+artifact_uri: file:///home/jovyan/examples/examples/pytorch/MPhil_BO/mlruns/0/ce752edf3f95406b8f5668d8579697be/artifacts
+end_time: 1684890688608
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: ce752edf3f95406b8f5668d8579697be
+run_name: capable-auk-759
+run_uuid: ce752edf3f95406b8f5668d8579697be
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1684890688595
+status: 3
+tags: []
+user_id: jovyan

@@ -1,0 +1,22 @@
+model:
+  type: Bert
+dataset:
+  path:
+  name: imdb
+  data_dir:
+  data_files:
+  text_key: text
+abspath: /home/renshuhuai/text-autoaugment
+aug: imdb
+per_device_train_batch_size: 64
+per_device_eval_batch_size: 128
+epoch: 10
+lr: 4e-5
+max_seq_length: 128
+n_aug: 4
+method: taa
+topN: 1
+seed: 42
+num_search: 200
+num_gpus: 4
+num_cpus: 40

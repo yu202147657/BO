@@ -1,0 +1,9 @@
+,eval_loss,eval_macro_f1,opt_object,policy
+0,0.5621984601020813,45.94594594594594,85.0,None
+1,0.4798503518104553,45.94594594594594,85.0,"('forget_majority', 'eda')"
+2,0.4461382925510406,45.94594594594594,85.0,"('influential_aug', 'backtranslation')"
+3,0.5701174736022949,45.94594594594594,85.0,"('random_forget', 'eda')"
+4,0.4701787233352661,45.94594594594594,85.0,"('influential_majority_forget', 'backtranslation')"
+5,0.5437309145927429,45.94594594594594,85.0,"('influential_minority_aug', 'eda')"
+6,0.4760557413101196,45.94594594594594,85.0,"('random_forget_majority', 'backtranslation')"
+7,0.8345881104469299,13.043478260869565,15.0,"('full_minority', 'eda')"

@@ -1,0 +1,15 @@
+artifact_uri: file:///home/jovyan/examples/examples/pytorch/MPhil_BO/mlruns/0/f364cedc670b47819528ae87e12aeb7f/artifacts
+end_time: 1684803176908
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: f364cedc670b47819528ae87e12aeb7f
+run_name: /home/jovyan/examples/examples/pytorch/MPhil_BO/taa/models/amazon_Bert_pretrained_trail1_seed42
+run_uuid: f364cedc670b47819528ae87e12aeb7f
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1684803176163
+status: 3
+tags: []
+user_id: jovyan
