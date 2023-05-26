@@ -12,7 +12,7 @@ def computation_graph(folder_path):
     dict_f1 = {'amazon': [], 'wiki': []}
     dict_time = {'amazon': [], 'wiki': []}
     dict_opt = {'amazon': [], 'wiki': []}
-    iterations_lst = [15, 30, 50, 100, 200]
+    iterations_lst = [15, 30, 50, 100]
     
     for filename in os.listdir(folder_path):
         if filename.endswith('.csv'):  # Check if the file is a CSV file
@@ -52,24 +52,23 @@ def computation_graph(folder_path):
     print(dict_f1, dict_time, dict_opt)
 
     fig, ax = plt.subplots()
-    #for dataset in ['amazon', 'wiki']:
-    for dataset in ['wiki']:
-        #ax.plot(iterations_lst, dict_f1[dataset], marker='o')
-        ax.plot(iterations_lst, dict_f1[dataset], marker='o')
+    for dataset in ['amazon', 'wiki']:
+        ax.plot(iterations_lst, dict_f1[dataset], marker='o', label = f'{dataset}')
     ax.set_xlabel('Iteration')
     ax.set_ylabel('Evaluation Macro f1')
     #ax.set_ylabel('Macro f1')
+    plt.legend(loc='lower right')
     plt.grid()
     plt.ylim(0, 100)
     plt.savefig(f'plots/line_plots/computation_graph.png', bbox_inches="tight")
     
     fig, ax = plt.subplots()
-    #for dataset in ['amazon', 'wiki']:
-    for dataset in ['wiki']:
-        ax.plot(iterations_lst, dict_time[dataset], marker='o')
+    for dataset in ['amazon', 'wiki']:
+        ax.plot(iterations_lst, dict_time[dataset], marker='o', label = f'{dataset}')
     ax.set_xlabel('Iteration')
     ax.set_ylabel('Time')
     plt.grid()
+    plt.legend(loc='lower right')
     plt.savefig(f'plots/line_plots/computation_graph_time.png', bbox_inches="tight")
     plt.show()
 
@@ -255,8 +254,8 @@ def forget_vs_aug(folder_path, dataset, sparsity):
             
 if __name__ == '__main__':
     #bo_efficiency('ray_results', 2000, 'wiki')
-    #computation_graph('results/computation_results')
-    bo_efficiency('results/computation_results', 'wiki')
+    computation_graph('results/computation_results')
+    #bo_efficiency('results/computation_results', 'wiki')
     bo_efficiency('results/computation_results', 'amazon')
     #extract_top_n('ray_results', 5)
     #for dataset in ['amazon', 'wiki']:

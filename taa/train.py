@@ -182,11 +182,11 @@ def train_and_eval(tag, policy_opt, save_path=None, only_eval=False, save_loss=F
 
         
     #Explainers
-    #if not policy_opt:
+    if not policy_opt:
     #    integrated_gradient(train_dataset.texts, train_dataset.labels, model, abspath, 'IG/%s_%s_%s_alpha%.2f_sparsity%d_class_imbalance%.2f' %
     #                                 (dataset_type, model_type, tag, alpha, sparsity, class_imbalance))
-    #    class_names = ['0', '1']
-        #lime_explainer(train_dataset.texts, train_dataset.labels, model, class_names, abspath, 'LIME/%s_%s/%s' % (dataset_type, model_type, tag))
+        class_names = ['0', '1']
+        lime_explainer(train_dataset.texts, train_dataset.labels, model, class_names, abspath, 'LIME/%s_%s/%s' % (dataset_type, model_type, tag))
     
     return result
 

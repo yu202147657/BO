@@ -131,8 +131,8 @@ def search_policy(dataset, abspath, num_search, configfile=None):
         pkl_path = os.path.join(abspath, 'final_policy')
         if not os.path.exists(pkl_path):
             os.makedirs(pkl_path)
-        policy_dir = os.path.join(pkl_path, '%s_%s_seed%d_n-aug%d_alpha%.2f_sparsity%d_class_imbalance%.2f_it%d.pkl' %
-                                  (dataset_type, model_type, seed, n_aug, alpha, sparsity, class_imbalance, num_search))
+        policy_dir = os.path.join(pkl_path, '%s_%s_seed%d_n-aug%d_alpha%.2f_sparsity%d_class_imbalance%.2f.pkl' %
+                                  (dataset_type, model_type, seed, n_aug, alpha, sparsity, class_imbalance))
         total_computation = 0
         #If final policy already exists
         if os.path.isfile(policy_dir):  # have been searched

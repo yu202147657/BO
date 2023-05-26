@@ -142,27 +142,61 @@ def integrated_gradient(texts, labels, model, abspath, file_name):
                                      (file_name)), "w") as file:
             file.write(htm.data)
             
-def lime_explainer(texts, labels, model, class_names, abspath, file_name):
+def lime_explain(texts, labels, model, class_names, abspath, file_name):
     
     tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 
     explainer = LimeTextExplainer(class_names=class_names)
     
+    examples = []
+    
     def predictor(texts):
         outputs = model(**tokenizer(texts, return_tensors="pt", padding=True).to('cuda'))
         tensor_logits = outputs[0]
         probas = F.softmax(tensor_logits).detach().cpu().numpy()
+        probas = np.array(probas)
         return probas
     
     for i, text in enumerate(texts):
-        tokenizer(text, return_tensors='pt', padding=True)
-        exp = explainer.explain_instance(text, predictor, num_features=20, num_samples=20)
+        exp = explainer.explain_instance(text, predictor, num_features=20, num_samples=500)
         #exp.save_to_file(f"{abspath}/results/explain/{file_name}_{i}.html")
         exp.save_to_file(os.path.join(abspath, '%s_%d.html' %
                                      (file_name, i)))
+        torch.cuda.empty_cache()
         
-    
-    
+def lime_explainer(texts, labels, model, class_names, abspath, file_name):
+    from transformers import BertTokenizer
+    from lime.lime_text import LimeTextExplainer
+
+    tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+    explainer = LimeTextExplainer()
+
+    def predictor(texts):
+        inputs = tokenizer(texts, return_tensors='pt', padding=True)
+        outputs = model(**inputs.to('cuda'))
+        tensor_logits = outputs[0]
+        probas = F.softmax(tensor_logits, dim=1).detach().cpu().numpy()
+        return probas
+
+    batch_size = 50
+    num_samples = 500
+
+    for i in range(0, len(texts), batch_size):
+        batch_texts = texts[i:i+batch_size]
+        batch_predictions = predictor(batch_texts)
+
+        for j, text in enumerate(batch_texts):
+            single_prediction = batch_predictions[j]
+
+            # Create a lambda function to wrap the single_prediction array
+            classifier_fn = lambda x: np.array([single_prediction] * len(x))
+
+            exp = explainer.explain_instance(text, classifier_fn, num_features=20, num_samples=num_samples)
+            exp.save_to_file(os.path.join(abspath, f"{file_name}_{i+j}.html"))
+
+        torch.cuda.empty_cache()
+
+
 if __name__ == '__main__':
         
     # Load BERT model and tokenizer
