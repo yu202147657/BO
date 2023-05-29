@@ -16,8 +16,6 @@ from captum.attr import configure_interpretable_embedding_layer, remove_interpre
 import numpy as np
 import os
 
-
-
 def compute_bert_outputs(model_bert, embedding_output, attention_mask=None, head_mask=None):
     if attention_mask is None:
         attention_mask = torch.ones(embedding_output.shape[0], embedding_output.shape[1]).to(embedding_output)
@@ -132,13 +130,14 @@ def integrated_gradient(texts, labels, model, abspath, file_name):
                                      (file_name)), "w") as file:
             file.write(htm.data)
             
-            
+        
 def lime_explainer(texts, labels, model, class_names, abspath, file_name):
     
     tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 
     explainer = LimeTextExplainer(class_names=class_names)
     
+    indices = []
     
     def predictor(texts):
         results = []
@@ -151,12 +150,18 @@ def lime_explainer(texts, labels, model, class_names, abspath, file_name):
         return np.array(results)
     
     for i, text in enumerate(texts):
-        exp = explainer.explain_instance(text, predictor, num_features=20, num_samples=5000)
-        #exp.save_to_file(f"{abspath}/results/explain/{file_name}_{i}.html")
-        exp.save_to_file(os.path.join(abspath, '%s_%d.html' %
-                                     (file_name, i)))
+        output = np.argmax(predictor(text), axis=1)
+        output_label = np.where(labels == 0, 0, 1)
+        if labels[i] != output_label:
+            indices.append(text)
+            print(text, i)
+            #exp = explainer.explain_instance(text, predictor, num_features=20, num_samples=5000)
+            #exp.save_to_file(os.path.join(abspath, '%s_%d.html' %
+            #                             (file_name, i)))
         torch.cuda.empty_cache()
-        
+            
+    df = pd.DataFrame(indices)
+    df.to_csv('/home/jovyan/examples/examples/pytorch/BO/false_indices.csv', sep=',', encoding='utf-8', index=False)
 
 
 if __name__ == '__main__':
@@ -170,9 +175,9 @@ if __name__ == '__main__':
     texts = ['You are a poo face', 'How are you doing', 'Text o classify']
     labels = [1, 0, 0]
     
-    integrated_gradient(texts, labels, model, 'test')
+    #integrated_gradient(texts, labels, model, 'test')
     
     class_names = ['pos', 'neg']
-    lime_explainer(texts, labels, model, class_names, 'test')
+    lime_explainer(texts, labels, model, class_names, 'path', 'test')
 
     

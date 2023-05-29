@@ -12,7 +12,7 @@ def computation_graph(folder_path):
     dict_f1 = {'amazon': [], 'wiki': []}
     dict_time = {'amazon': [], 'wiki': []}
     dict_opt = {'amazon': [], 'wiki': []}
-    iterations_lst = [15, 30, 50, 100]
+    iterations_lst = [15, 30, 50, 100, 200]
     
     for filename in os.listdir(folder_path):
         if filename.endswith('.csv'):  # Check if the file is a CSV file
@@ -93,22 +93,22 @@ def bo_efficiency(folder_path, dataset):
             df = df.sort_values('timestamp')
             iterations = list(range(0, len(df)))
                               
-            #ax.plot(iterations, df['eval_loss'].values, label=f'{filename}')
+            ax.plot(iterations, df['eval_loss'].values, label=f'{filename}')
             #ax.plot(iterations, df['opt_object'].values, label=f'{filename}')
-            ax.plot(iterations, df['eval_macro_f1'].values, label=f'{filename}')
+            #ax.plot(iterations, df['eval_macro_f1'].values, label=f'{filename}')
             
     
     ax.set_xlabel('Iterations')
-    #ax.set_ylabel('Evaluation Loss')
+    ax.set_ylabel('Evaluation Loss')
     #ax.set_ylabel('Evaluation Accuracy')
-    ax.set_ylabel('Evaluation Macro f1')
+    #ax.set_ylabel('Evaluation Macro f1')
     #plt.grid()
     #for vline in [15, 30, 50, 100, 200]:
     #    plt.axvline(x=vline, color='gray')
     #    plt.text(vline, 100, f'{vline}', color='gray', ha='center', va='bottom')
 
-    plt.ylim(0, 100)
-    #plt.ylim(0, 1.25)
+    #plt.ylim(0, 100)
+    plt.ylim(0, 2.25)
     #plt.savefig(f'plots/line_plots/bo_efficiency_{sparsity}_{dataset}.png', bbox_inches="tight")
     plt.savefig(f'plots/line_plots/bo_efficiency_{dataset}.png', bbox_inches="tight")
     plt.show()
@@ -125,8 +125,7 @@ def extract_top_n(folder_path, n):
             
             df = pd.read_csv(file_path, index_col=False)
             #sort by order of time
-            #df = df.sort_values('opt_object',  ascending=False)
-            df = df.sort_values('eval_macro_f1',  ascending=False)
+            df = df.sort_values('opt_object',  ascending=False)
             df = df.iloc[0:n]
             
             # extract the policy
@@ -134,7 +133,7 @@ def extract_top_n(folder_path, n):
             # Apply the extraction using the pattern to the entire column
             df['policy'] = df['config'].str.extract(pattern, expand=False)
            
-            columns_to_keep = ['eval_loss', 'eval_macro_f1', 'opt_object', 'policy']
+            columns_to_keep = ['eval_loss', 'opt_object', 'policy']
             df = df.loc[:, columns_to_keep].reset_index(drop=True)  
             
             df_reshaped = df.stack().to_frame().transpose()
@@ -147,14 +146,14 @@ def extract_top_n(folder_path, n):
 
             df_reshaped.columns = new_columns
             df_reshaped['sparsity'] = re.search(r'sparsity([^_]+)', filename).group(1)
-            df_reshaped['class_imbalance'] = re.search(r'_class_imbalance([\d.]+)(?!\.)', filename).group(1)
+            df_reshaped['class_imbalance'] = filename.split('_class_imbalance')[1].split('.csv')[0]
             df_reshaped['dataset'] = re.search(r'^([^_]+)', filename).group(1) 
 
             if first_iteration: #write header
                 df_reshaped.to_csv(f'top{n}.csv', mode='a', index=False)
                 first_iteration = False
             else:
-                df_reshaped.to_csv(f'top{n}_f1.csv', mode='a', index=False, header=False)
+                df_reshaped.to_csv(f'top{n}.csv', mode='a', index=False, header=False)
 
 def result_closeness(folder_path, dataset, sparsity):
     fig, ax = plt.subplots()
@@ -187,18 +186,18 @@ def result_closeness(folder_path, dataset, sparsity):
             df = df.loc[:, columns_to_keep].reset_index(drop=True)
             
             #cap df at 8 rows bc that's max unique policy in the df
-            df = df.iloc[0:8]
+            df = df.iloc[0:7]
             
             #add in class imbalance
             imbalance = re.search(r'_class_imbalance([\d.]+)(?!\.)', filename).group(1)
             df.to_csv(f'results/result_closeness/{dataset}_{sparsity}_{imbalance}.csv')
             
-            ax.plot(list(range(1, 9)), df['eval_macro_f1'].values, marker='o', label=f'{imbalance}')
+            ax.plot(list(range(1, 8)), df['eval_macro_f1'].values, marker='o', label=f'{imbalance}')
     
     ax.set_xlabel('Rank')
     ax.set_ylabel('Evaluation Macro f1')
     plt.grid()
-    plt.ylim(30, 100)
+    plt.ylim(0, 100)
     plt.legend()
     plt.savefig(f'plots/line_plots/result_closeness_{dataset}_{sparsity}.png', bbox_inches="tight")
     plt.show()
@@ -254,11 +253,14 @@ def forget_vs_aug(folder_path, dataset, sparsity):
             
 if __name__ == '__main__':
     #bo_efficiency('ray_results', 2000, 'wiki')
-    computation_graph('results/computation_results')
-    #bo_efficiency('results/computation_results', 'wiki')
+    #computation_graph('results/computation_results')
+    bo_efficiency('results/computation_results', 'wiki')
     bo_efficiency('results/computation_results', 'amazon')
     #extract_top_n('ray_results', 5)
     #for dataset in ['amazon', 'wiki']:
     #    for sparsity in [500, 2000, 5000]:
     #        result_closeness('ray_results', dataset, sparsity)
-    #forget_vs_aug('ray_results', 'amazon', 500)
+    #for dataset in ['amazon', 'wiki']:
+    #    for sparsity in [500, 2000, 5000]:
+    #        forget_vs_aug('ray_results', dataset, sparsity)
+    
